@@ -5,7 +5,8 @@ public class NasaAnswer {
     String title;
     String url;
 
-    public NasaAnswer(@JsonProperty("date") String date,
+    public NasaAnswer(@JsonProperty("copyright") String copyright,
+                      @JsonProperty("date") String date,
                       @JsonProperty("explanation") String explanation,
                       @JsonProperty("hdurl") String hdurl,
                       @JsonProperty("media_type") String media_type,
