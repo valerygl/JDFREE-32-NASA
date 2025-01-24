@@ -4,6 +4,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Scanner;
 
@@ -16,19 +17,26 @@ public class Main {
         CloseableHttpClient client = createDefault();
         ObjectMapper mapper = new ObjectMapper();
 
+        // посылаю запрос на постоянный эндпоинт
         HttpGet req = new HttpGet(urlWithToken);
+
+        // HTTP-ответ сохраняю в переменную
         CloseableHttpResponse resp = client.execute(req);
 
+        // преобразование битовой последовательности (http-Ответ) к структуре, описанной в классе NasaAnswer
+        NasaAnswer ans = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
 
-        NasaAnswer ans1 = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
-//        NasaAnswer ans = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
+        // посылаю запрос по адресу картинки
+        HttpGet pictureReq = new HttpGet(ans.url);
 
-        System.out.println(ans1.title);
-        System.out.println(ans1.url);
+        // сохраняем картинку в переменную
+        resp = client.execute(pictureReq);
 
-//        Scanner sca = new Scanner(resp.getEntity().getContent());
-//        String imgInfo = sca.nextLine();
-//        System.out.println(imgInfo);
+        // специальный объект , привязанный к файлу га диске и умеющий в него записывать
+        FileOutputStream fos = new FileOutputStream("Pics/dailyPic.jpg");
+
+        // взять ответ (картинку) и сохранить в файл
+        resp.getEntity().writeTo(fos);
 
     }
 }

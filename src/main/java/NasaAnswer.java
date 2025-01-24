@@ -1,5 +1,6 @@
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+// класс, связывающий поля из json с полями класса. Чтобы потом пользоваться полями объекта
 public class NasaAnswer {
 
     String title;
