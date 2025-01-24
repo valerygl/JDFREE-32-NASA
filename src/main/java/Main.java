@@ -26,14 +26,19 @@ public class Main {
         // преобразование битовой последовательности (http-Ответ) к структуре, описанной в классе NasaAnswer
         NasaAnswer ans = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
 
+        // из URLа добываем название файла
+        // System.out.println(ans.url);
+        String[] splittedUrl = ans.url.split("/");
+        String fileName = splittedUrl[splittedUrl.length-1];
+
         // посылаю запрос по адресу картинки
         HttpGet pictureReq = new HttpGet(ans.url);
 
         // сохраняем картинку в переменную
         resp = client.execute(pictureReq);
 
-        // специальный объект , привязанный к файлу га диске и умеющий в него записывать
-        FileOutputStream fos = new FileOutputStream("Pics/dailyPic.jpg");
+        // создаем специальный объект, привязанный к файлу на диске и умеющий в него записывать
+        FileOutputStream fos = new FileOutputStream("Pics/" + fileName);
 
         // взять ответ (картинку) и сохранить в файл
         resp.getEntity().writeTo(fos);
