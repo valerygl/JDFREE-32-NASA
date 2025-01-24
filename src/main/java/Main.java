@@ -23,25 +23,31 @@ public class Main {
         // HTTP-ответ сохраняю в переменную
         CloseableHttpResponse resp = client.execute(req);
 
-        // преобразование битовой последовательности (http-Ответ) к структуре, описанной в классе NasaAnswer
-        NasaAnswer ans = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
+        if (resp.getCode() == 200) {
 
-        // из URLа добываем название файла
-        // System.out.println(ans.url);
-        String[] splittedUrl = ans.url.split("/");
-        String fileName = splittedUrl[splittedUrl.length-1];
+            // преобразование битовой последовательности (http-Ответ) к структуре, описанной в классе NasaAnswer
+            NasaAnswer ans = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
 
-        // посылаю запрос по адресу картинки
-        HttpGet pictureReq = new HttpGet(ans.url);
+            // из URLа добываем название файла
+            // System.out.println(ans.url);
+            String[] splittedUrl = ans.url.split("/");
+            String fileName = splittedUrl[splittedUrl.length - 1];
 
-        // сохраняем картинку в переменную
-        resp = client.execute(pictureReq);
+            // посылаю запрос по адресу картинки
+            HttpGet pictureReq = new HttpGet(ans.url);
 
-        // создаем специальный объект, привязанный к файлу на диске и умеющий в него записывать
-        FileOutputStream fos = new FileOutputStream("Pics/" + fileName);
+            // сохраняем картинку в переменную
+            resp = client.execute(pictureReq);
 
-        // взять ответ (картинку) и сохранить в файл
-        resp.getEntity().writeTo(fos);
+            // создаем специальный объект, привязанный к файлу на диске и умеющий в него записывать
+            FileOutputStream fos = new FileOutputStream("Pics/" + fileName);
+
+            // взять ответ (картинку) и сохранить в файл
+            resp.getEntity().writeTo(fos);
+        }
+        else {
+            System.out.println("Sorry, NASA is down now");
+        }
 
     }
 }
