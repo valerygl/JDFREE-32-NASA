@@ -26,7 +26,7 @@ public class AstronomyPictureOfTheDay {
         if (resp.getCode() == 200) {
 
             // преобразование битовой последовательности (http-Ответ) к структуре, описанной в классе NasaAnswer
-            NasaAnswer ans = mapper.readValue(resp.getEntity().getContent(), NasaAnswer.class);
+            DailyPicResponse ans = mapper.readValue(resp.getEntity().getContent(), DailyPicResponse.class);
 
             // из URLа добываем название файла
             // System.out.println(ans.url);
