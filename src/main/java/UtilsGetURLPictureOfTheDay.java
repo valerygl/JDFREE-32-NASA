@@ -8,11 +8,11 @@ import java.io.IOException;
 
 import static org.apache.hc.client5.http.impl.classic.HttpClients.createDefault;
 
-public class AstronomyPictureOfTheDay {
+public class UtilsGetURLPictureOfTheDay {
 
     // класс умеет получать картинку дня и сохранять ее
 
-    public static void getAndSaveDailyPicture () throws IOException {
+    public static String getAndSaveDailyPicture () throws IOException {
 
         String urlWithToken = "https://api.nasa.gov/planetary/apod?api_key=LjYFU2ea7TdbiXGN1ZDIiI4z9IFiQ3pAh5b5cEJn";
 
@@ -29,26 +29,11 @@ public class AstronomyPictureOfTheDay {
 
             // преобразование битовой последовательности (http-Ответ) к структуре, описанной в классе NasaAnswer
             DailyPicResponse ans = mapper.readValue(resp.getEntity().getContent(), DailyPicResponse.class);
+            return ans.url;
 
-            // из URLа добываем название файла
-            // System.out.println(ans.url);
-            String[] splittedUrl = ans.url.split("/");
-            String fileName = splittedUrl[splittedUrl.length - 1];
-
-            // посылаю запрос по адресу картинки
-            HttpGet pictureReq = new HttpGet(ans.url);
-
-            // сохраняем картинку в переменную
-            resp = client.execute(pictureReq);
-
-            // создаем специальный объект, привязанный к файлу на диске и умеющий в него записывать
-            FileOutputStream fos = new FileOutputStream("Pics/" + fileName);
-
-            // взять ответ (картинку) и сохранить в файл
-            resp.getEntity().writeTo(fos);
         }
         else {
-            System.out.println("Sorry, NASA is down now");
+            return "Sorry, NASA is down now";
         }
 
     }
