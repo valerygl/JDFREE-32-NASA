@@ -3,16 +3,15 @@ import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 import static org.apache.hc.client5.http.impl.classic.HttpClients.createDefault;
 
 public class UtilsGetURLPictureOfTheDay {
 
-    // класс умеет получать картинку дня и сохранять ее
 
-    public static String getAndSaveDailyPicture () throws IOException {
+
+    public static String getPicURL () throws IOException {
 
         String urlWithToken = "https://api.nasa.gov/planetary/apod?api_key=LjYFU2ea7TdbiXGN1ZDIiI4z9IFiQ3pAh5b5cEJn";
 

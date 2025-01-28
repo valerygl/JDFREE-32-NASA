@@ -3,7 +3,12 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.IOException;
+
 public class PicSenderBot extends TelegramLongPollingBot {
+
+
+
 
     @Override
     public void onUpdateReceived( Update update) {
@@ -13,24 +18,45 @@ public class PicSenderBot extends TelegramLongPollingBot {
 //        /image
 //        /date 2025-01-28
 
-
-        // We check if the update has a message and the message has text
         if (update.hasMessage() && update.getMessage().hasText()) {
-            SendMessage replyMessage = new SendMessage(); // Create a SendMessage object with mandatory fields
-            long chatId = update.getMessage().getChatId(); // узнаём, откуда нам писали
-            replyMessage.setChatId(chatId); // задаем, в какой чат будем отвечать (в тот же, откуда нам написали)
-            String origText = update.getMessage().getText(); // вытащим текст из оригинального сообщения
-            replyMessage.setText("Вы нам писали, что " + origText);
 
+            long chatId = update.getMessage().getChatId();
+            String textFromUser = update.getMessage().getText();
 
-//            message.setChatId(update.getMessage().getChatId().toString());
-//            message.setText(update.getMessage().getText());
+            switch (textFromUser) {
+                case "/start":
+                    sendMessage(chatId, "Привет, я бот. Здесь есть команды /help и /image");
+                    break;
 
-            try {
-                execute(replyMessage ); // Call method to send the message
-            } catch (TelegramApiException e) {
-                e.printStackTrace();
+                case "/help":
+                    sendMessage(chatId, "Используй /image , чтобы получить картинку из NASA");
+                    break;
+
+                case "/image":
+                    try {
+                        sendMessage(chatId, UtilsGetURLPictureOfTheDay.getPicURL());
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
+                    break;
+
+                default:
+                    sendMessage(chatId, "Нет такой команды. Используй /image , чтобы получить картинку из NASA");
             }
+        }
+    }
+
+
+    private void sendMessage(long chatId, String incomingText) {
+
+        SendMessage msg = new SendMessage(); // Create a SendMessage object with mandatory fields
+        msg.setChatId(chatId); // задаем, в какой чат будем отвечать (в тот же, откуда нам написали)
+        msg.setText(incomingText);
+
+        try {
+            execute(msg ); // Call method to send the message
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
