@@ -13,16 +13,16 @@ import java.io.IOException;
 
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, TelegramApiException {
 
-//        AstronomyPictureOfTheDay.getAndSaveDailyPicture();
+        new PicSenderBot("daily_pic_sender_bot", "7919335706:AAG9snwsihw7O-uFF4UsUd8DOu4bwx0p_NI");
 
-        try {
-            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
-            botsApi.registerBot(new PicSenderBot());
-        } catch (TelegramApiException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+//            botsApi.registerBot(new PicSenderBot());
+//        } catch (TelegramApiException e) {
+//            e.printStackTrace();
+//        }
 
     }
 }

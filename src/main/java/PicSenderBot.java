@@ -1,22 +1,29 @@
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
+import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
 import java.io.IOException;
 
 public class PicSenderBot extends TelegramLongPollingBot {
+    private final String BOT_NAME;
+    private final String BOT_TOKEN;
 
 
+    // теперь программа работает не только с одним ботом, но с любым другим ботом (имя+токен), которого ей передадут при вызове
+    public PicSenderBot(String BOT_NAME, String BOT_TOKEN) throws TelegramApiException {
+        this.BOT_NAME = BOT_NAME;
+        this.BOT_TOKEN = BOT_TOKEN;
+        TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+        botsApi.registerBot(this);
+    }
 
 
     @Override
     public void onUpdateReceived( Update update) {
 
-//        /start
-//        /help
-//        /image
-//        /date 2025-01-28
 
         if (update.hasMessage() && update.getMessage().hasText()) {
 
@@ -62,12 +69,12 @@ public class PicSenderBot extends TelegramLongPollingBot {
 
     @Override
     public String getBotUsername() {
-        return "pic_sender";
+        return BOT_NAME;
     }
 
     @Override
     public String getBotToken() {
-        return "7919335706:AAG9snwsihw7O-uFF4UsUd8DOu4bwx0p_NI";
+        return BOT_TOKEN;
     }
 
 }
